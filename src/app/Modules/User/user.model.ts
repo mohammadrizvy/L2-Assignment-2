@@ -1,5 +1,7 @@
-import { Schema, model, connect } from 'mongoose';
-import { Address, FullName, Orders, User } from './user.interface';
+import { Schema, model } from 'mongoose';
+import { Address, FullName,User } from './user.interface';
+
+// TODO : ZOD Validation isn't dont yet !
 
 const fullNameSchema = new Schema<FullName>({
   firstName: { type: String, required: true },
@@ -12,13 +14,11 @@ const addressSchema = new Schema<Address>({
   country: { type: String },
 });
 
-const ordersSchema = new Schema<Orders>([
-  {
-    productName: { type: String },
-    price: { type: Number },
-    quantity: { type: Number },
-  },
-]);
+const ordersSchema = new Schema({
+  productName: { type: String },
+  price: { type: Number },
+  quantity: { type: Number },
+});
 
 const userSchema = new Schema<User>({
   userId: { type: Number },
@@ -33,8 +33,7 @@ const userSchema = new Schema<User>({
   hobbies: { type: [String], required: true },
   address: addressSchema,
 
-  orders: ordersSchema,
+  orders: [ordersSchema],
 });
 
-
-const User = model<User>('User', userSchema);
+export const UserModel = model<User>('User', userSchema);
