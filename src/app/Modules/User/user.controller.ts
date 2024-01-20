@@ -17,6 +17,21 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
+const retriveAllUsers = async (req : Request, res : Response) => {
+    try{
+        const result = await UserServices.retrieveAllUserFromDB()
+        res.status(200).json({
+          success: true,
+          messsage: 'User retrived successfully!',
+          data: result,
+        });
+    }catch(err){
+        console.log(err, "Couldn't create user");
+    }
+    
+}
+
 export const userControllers = {
   createUser,
+  retriveAllUsers,
 };
