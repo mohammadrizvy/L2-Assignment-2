@@ -29,8 +29,12 @@ export type TUser = {
   hobbies: string[];
   address: TAddress;
   orders: TOrders;
+  isDeleted : boolean
 };
 
 export interface UserModel extends Model<TUser> {
+  // eslint-disable-next-line no-unused-vars
   isUserExists(userId:number):Promise<TUser | null>
+  // eslint-disable-next-line no-unused-vars
+  getSingleUserById(userId : number) : Promise<TUser|null>
 }

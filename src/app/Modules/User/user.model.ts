@@ -37,12 +37,13 @@ const userSchema = new Schema<TUser, UserModel>({
   fullName: fullNameSchema,
 
   age: { type: Number },
-  email: { type: String , unique : true },
+  email: { type: String, unique: true },
   isActive: { type: Boolean },
   hobbies: { type: [String], required: true },
   address: addressSchema,
 
   orders: [ordersSchema],
+   isDeleted: { type: Boolean, default: false },
 });
 
 // !Utilizing the bcrypt algorithm for hashing the password
@@ -58,16 +59,23 @@ userSchema.pre('save', async function (next) {
 });
 
 // *Post save
-userSchema.post('save', function (doc,next) {
- doc.password = "";
- next();
+userSchema.post('save', function (doc, next) {
+  doc.password = '';
+  next();
 });
+
+// !Statics
 
 //* Creating static for create new user !
 
 userSchema.statics.isUserExists = async function (userId: number) {
   const existingUser = await User.findOne({ userId });
   return existingUser;
+};
+// *Creating statics for finding single user!
+userSchema.statics.getSingleUserById = async function (userId: number) {
+  const getSingleUser = await this.findOne({ userId });
+  return getSingleUser;
 };
 
 export const User = model<TUser, UserModel>('User', userSchema);

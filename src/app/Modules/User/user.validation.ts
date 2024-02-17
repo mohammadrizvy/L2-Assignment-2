@@ -64,6 +64,7 @@ const userValidationSchema = z.object({
   address: addressValidationSchema,
 
   orders: z.array(ordersValidationSchema),
+  isDeleted : z.boolean()
 });
 
 export default userValidationSchema;

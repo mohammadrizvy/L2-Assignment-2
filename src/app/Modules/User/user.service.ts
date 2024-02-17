@@ -25,13 +25,13 @@ const retrieveAllUserFromDB = async () => {
 
 // !Retrieveing a single user form DATABASE
 
-const retrieveSingleUserFromDB = async (userId: number) => {
-  const result = await User.findOne({ userId: userId });
-  return result;
+const retrieveSingleUserByIdFromDB = async (userId: number) => {
+  const result = await User.getSingleUserById(userId);
+  return result; 
 };
 
 export const UserServices = {
   createUserIntoDB,
   retrieveAllUserFromDB,
-  retrieveSingleUserFromDB,
+  retrieveSingleUserByIdFromDB,
 };

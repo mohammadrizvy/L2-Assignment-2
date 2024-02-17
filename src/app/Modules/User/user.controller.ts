@@ -52,24 +52,36 @@ const retriveAllUsers = async (req: Request, res: Response) => {
 const retrieveSingleUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId, 10);
-    const result = await UserServices.retrieveSingleUserFromDB(userId);
-    res.status(200).json({
-      success: true,
-      message: 'User fetched successfully!',
-      data: result,
-    });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
+    const result = await UserServices.retrieveSingleUserByIdFromDB(userId);
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User fetched successfully!',
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found',
+        },
+      });
+    }
+  } catch (err) {
     res.status(500).json({
       success: false,
-      message: 'User not found',
+      message: 'Internal server error',
       error: {
-        code: 404,
-        description: 'User not found',
+        code: 500,
+        description: 'Internal server error',
       },
     });
   }
 };
+
 
 export const userControllers = {
   createUser,
