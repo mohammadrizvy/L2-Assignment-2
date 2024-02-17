@@ -1,19 +1,37 @@
-import { User } from './user.interface';
-import { UserModel } from './user.model';
+import { TUser } from './user.interface';
+import { User } from './user.model';
 
-const createUserIntoDB = async (user: User) => {
-  const result = await UserModel.create(user);
+const createUserIntoDB = async (userData: TUser) => {
+  if (await User.isUserExists(userData.userId)) {
+    throw new Error('This User Already Exists');
+  }
+  const result = await User.create(userData);
+
   return result;
 };
 
-const retrieveAllUserFromDB = async() => {
- const result = await UserModel.find().select(
-   'username fullName age email address',
- );
-    return result; 
-}
+const retrieveAllUserFromDB = async () => {
+  //!Using select method form mongoose to show the only the specific data of a user ;
+  const result = await User.find().select({
+    username: 1,
+    fullName: 1,
+    age: 1,
+    email: 1,
+    address: 1,
+    userId: 1,
+  });
+  return result;
+};
+
+// !Retrieveing a single user form DATABASE
+
+const retrieveSingleUserFromDB = async (userId: number) => {
+  const result = await User.findOne({ userId: userId });
+  return result;
+};
 
 export const UserServices = {
   createUserIntoDB,
-  retrieveAllUserFromDB
+  retrieveAllUserFromDB,
+  retrieveSingleUserFromDB,
 };

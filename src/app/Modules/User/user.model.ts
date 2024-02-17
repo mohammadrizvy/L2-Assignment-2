@@ -1,34 +1,43 @@
 import { Schema, model } from 'mongoose';
-import { Address, FullName,User } from './user.interface';
+import { TAddress, TFullName, TUser, UserModel } from './user.interface';
+import bcrypt from 'bcrypt';
+import config from '../../config';
 
-// TODO : ZOD Validation isn't dont yet !
-
-const fullNameSchema = new Schema<FullName>({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+const fullNameSchema = new Schema<TFullName>({
+  firstName: {
+    type: String,
+    trim: true,
+  },
+  lastName: { type: String },
 });
 
-const addressSchema = new Schema<Address>({
-  street: { type: String },
-  city: { type: String },
-  country: { type: String },
-});
+const addressSchema = new Schema<TAddress>(
+  {
+    street: { type: String },
+    city: { type: String },
+    country: { type: String },
+  },
+  { _id: false },
+);
 
-const ordersSchema = new Schema({
-  productName: { type: String },
-  price: { type: Number },
-  quantity: { type: Number },
-});
+const ordersSchema = new Schema(
+  {
+    productName: { type: String },
+    price: { type: Number },
+    quantity: { type: Number },
+  },
+  { _id: false },
+);
 
-const userSchema = new Schema<User>({
-  userId: { type: Number },
-  username: { type: String },
+const userSchema = new Schema<TUser, UserModel>({
+  userId: { type: Number, unique: true },
+  username: { type: String, unique: true },
   password: { type: String },
 
   fullName: fullNameSchema,
 
   age: { type: Number },
-  email: { type: String },
+  email: { type: String , unique : true },
   isActive: { type: Boolean },
   hobbies: { type: [String], required: true },
   address: addressSchema,
@@ -36,4 +45,29 @@ const userSchema = new Schema<User>({
   orders: [ordersSchema],
 });
 
-export const UserModel = model<User>('User', userSchema);
+// !Utilizing the bcrypt algorithm for hashing the password
+// *Pre save
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_round),
+  );
+  next();
+});
+
+// *Post save
+userSchema.post('save', function (doc,next) {
+ doc.password = "";
+ next();
+});
+
+//* Creating static for create new user !
+
+userSchema.statics.isUserExists = async function (userId: number) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+
+export const User = model<TUser, UserModel>('User', userSchema);
