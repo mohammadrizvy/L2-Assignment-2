@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
 import userValidationSchema from './user.validation';
+import { TUpdateUser } from './user.interface';
 // import { TUpdateUser } from './user.interface';
 
 // !The controller will only handle applicatin logics
@@ -86,41 +87,42 @@ const retrieveSingleUser = async (req: Request, res: Response) => {
 // ! UPDATING SINGLE USERS INFORMATION
 
 // Controller
-const updateSingleUsersInfo = async (req: Request, res: Response) => {
+const updateSingleUser = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
-    const userData = req.body;
+    const userId = parseInt(req.params.userId, 10);
+    const updatedData: TUpdateUser = req.body;
 
-    console.log('Updating user with userId:', userId);
-    console.log('New user data:', userData);
+    const result = await UserServices.updateSingleUserInDb(userId, updatedData);
+    console.log(result);
 
-    const result = await UserServices.updateUserByIdInDb(userId, userData);
-
-    if (!result) {
-      console.log('User not found or not updated.');
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User updated successfully!',
+        data: result,
+      });
+    } else {
       res.status(404).json({
         success: false,
-        message: 'User not found or not updated.',
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found',
+        },
       });
-      return;
     }
-
-    console.log('User updated successfully.');
-    res.status(200).json({
-      success: true,
-      message: 'User updated successfully!',
-      data: result,
-    });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    console.error('Error updating user:', err);
+  } catch (err) {
     res.status(500).json({
       success: false,
-      message: err.message || 'Internal Server Error',
-      error: err,
+      message: 'Internal server error',
+      error: {
+        code: 500,
+        description: 'Internal server error',
+      },
     });
   }
 };
+
 
 
 // DELELTE USER
@@ -149,6 +151,6 @@ export const userControllers = {
   createUser,
   retriveAllUsers,
   retrieveSingleUser,
-  updateSingleUsersInfo,
   deleteSingleUser,
+  updateSingleUser
 };

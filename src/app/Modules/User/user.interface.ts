@@ -53,4 +53,6 @@ export interface UserModel extends Model<TUser> {
   getSingleUserById(userId: number): Promise<TUser | null>;
   // eslint-disable-next-line no-unused-vars
   deleteUserById(userId: number): Promise<boolean>;
+  // eslint-disable-next-line no-unused-vars
+  updateSingleUser(userId: number,userData: TUpdateUser,): Promise<TUser | null>;
 }

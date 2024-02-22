@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { TAddress, TFullName, TUser, UserModel } from './user.interface';
+import { TAddress, TFullName, TUpdateUser, TUser, UserModel } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
 
@@ -78,18 +78,31 @@ userSchema.statics.getSingleUserById = async function (userId: number) {
   return getSingleUser;
 };
 
-// userSchema.statics.updateUserById = async function (userId: number, newUser : TUser ) {
-//   const result = await User.findByIdAndUpdate(userId, newUser, {
-//     new: true,
-//   });
-//   return result;
-// }
-
 userSchema.statics.deleteUserById = async function (userId: number) {
   const result = await this.deleteOne({ userId });
 
   // If the result.deletedCount is greater than 0, it means a document was deleted
   return result.deletedCount > 0;
 };
+
+//* Updating users information
+
+userSchema.statics.updateSingleUser = async function (
+  userId: number,
+  userData: TUpdateUser,): Promise<TUser | null> {
+  const result = await this.findOneAndUpdate(
+    { userId, isDeleted: false },
+    userData,
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+  return result;
+};
+
+
+
+
 
 export const User = model<TUser, UserModel>('User', userSchema);

@@ -15,7 +15,8 @@ router.get('/users', userControllers.retriveAllUsers);
 router.get('/users/:userId', userControllers.retrieveSingleUser);
 
 // ?This route is for updating a users informaiton 
-router.put("/users/:userId" , userControllers.updateSingleUsersInfo)
+
+router.put('/users/:userId', userControllers.updateSingleUser);
 
 // ?This route is for deleting a users 
 router.delete('/users/:userId', userControllers.deleteSingleUser);
