@@ -67,4 +67,5 @@ const userValidationSchema = z.object({
   isDeleted : z.boolean()
 });
 
+
 export default userValidationSchema;

@@ -43,7 +43,7 @@ const userSchema = new Schema<TUser, UserModel>({
   address: addressSchema,
 
   orders: [ordersSchema],
-   isDeleted: { type: Boolean, default: false },
+  isDeleted: { type: Boolean, default: false },
 });
 
 // !Utilizing the bcrypt algorithm for hashing the password
@@ -76,6 +76,20 @@ userSchema.statics.isUserExists = async function (userId: number) {
 userSchema.statics.getSingleUserById = async function (userId: number) {
   const getSingleUser = await this.findOne({ userId });
   return getSingleUser;
+};
+
+// userSchema.statics.updateUserById = async function (userId: number, newUser : TUser ) {
+//   const result = await User.findByIdAndUpdate(userId, newUser, {
+//     new: true,
+//   });
+//   return result;
+// }
+
+userSchema.statics.deleteUserById = async function (userId: number) {
+  const result = await this.deleteOne({ userId });
+
+  // If the result.deletedCount is greater than 0, it means a document was deleted
+  return result.deletedCount > 0;
 };
 
 export const User = model<TUser, UserModel>('User', userSchema);

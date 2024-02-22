@@ -29,12 +29,28 @@ export type TUser = {
   hobbies: string[];
   address: TAddress;
   orders: TOrders;
-  isDeleted : boolean
+  isDeleted: boolean;
+};
+
+export type TUpdateUser = {
+  userId?: number;
+  username?: string;
+  password?: string;
+  fullName?: TFullName;
+  age?: number;
+  email?: string;
+  isActive?: boolean;
+  hobbies?: string[];
+  address?: TAddress;
+  orders?: TOrders;
+  isDeleted?: boolean;
 };
 
 export interface UserModel extends Model<TUser> {
   // eslint-disable-next-line no-unused-vars
-  isUserExists(userId:number):Promise<TUser | null>
+  isUserExists(userId: number): Promise<TUser | null>;
   // eslint-disable-next-line no-unused-vars
-  getSingleUserById(userId : number) : Promise<TUser|null>
+  getSingleUserById(userId: number): Promise<TUser | null>;
+  // eslint-disable-next-line no-unused-vars
+  deleteUserById(userId: number): Promise<boolean>;
 }

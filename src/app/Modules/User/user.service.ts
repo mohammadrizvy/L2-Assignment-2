@@ -1,4 +1,4 @@
-import { TUser } from './user.interface';
+import {  TUser } from './user.interface';
 import { User } from './user.model';
 
 const createUserIntoDB = async (userData: TUser) => {
@@ -27,11 +27,47 @@ const retrieveAllUserFromDB = async () => {
 
 const retrieveSingleUserByIdFromDB = async (userId: number) => {
   const result = await User.getSingleUserById(userId);
-  return result; 
+  return result;
 };
+
+// ! Updating users information
+const updateUserByIdInDb = async (
+  userId: string,
+  userData: TUser,
+): Promise<TUser | null> => {
+  const userIdNumber = Number(userId);
+
+  const existingUser = await User.isUserExists(userIdNumber);
+
+  if (!existingUser) {
+    throw new Error('Error from updating user');
+  } else {
+    const result = await User.findOneAndUpdate(
+      { userId: userIdNumber },
+      userData,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    return result;
+  }
+};
+
+// ! Delete User
+
+const DeleteSingleUser = async (userId: number): Promise<boolean> => {
+  const result = await User.deleteOne({ userId });
+
+  return result.deletedCount !== 0;
+};
+
 
 export const UserServices = {
   createUserIntoDB,
   retrieveAllUserFromDB,
   retrieveSingleUserByIdFromDB,
+  updateUserByIdInDb,
+  DeleteSingleUser,
 };
