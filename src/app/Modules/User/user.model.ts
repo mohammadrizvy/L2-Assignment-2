@@ -1,5 +1,12 @@
 import { Schema, model } from 'mongoose';
-import { TAddress, TFullName, TOrders, TUpdateUser, TUser, UserModel } from './user.interface';
+import {
+  TAddress,
+  TFullName,
+  TOrders,
+  TUpdateUser,
+  TUser,
+  UserModel,
+} from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
 
@@ -89,7 +96,8 @@ userSchema.statics.deleteUserById = async function (userId: number) {
 
 userSchema.statics.updateSingleUser = async function (
   userId: number,
-  userData: TUpdateUser,) {
+  userData: TUpdateUser,
+) {
   const result = await this.findOneAndUpdate(
     { userId, isDeleted: false },
     userData,
@@ -101,11 +109,11 @@ userSchema.statics.updateSingleUser = async function (
   return result;
 };
 
-// Static method for adding a new product to user's orders
+// *Static method for adding a new product to user's orders
 userSchema.statics.addProductToUserOrders = async function (
   userId: number,
-  productData: TOrders
-): Promise<TUser | null> {
+  productData: TOrders,
+) {
   const updatedUser = await this.findOneAndUpdate(
     { userId },
     {
@@ -117,13 +125,18 @@ userSchema.statics.addProductToUserOrders = async function (
       new: true,
       runValidators: true,
       upsert: true,
-    }
+    },
   );
   return updatedUser;
 };
 
+// *Static method for getting all orders of a user
 
-
-
+userSchema.statics.getAllOrdersOfUser = async function (
+  userId: number,
+) {
+  const result = await this.findOne({ userId });
+  return result;
+};
 
 export const User = model<TUser, UserModel>('User', userSchema);

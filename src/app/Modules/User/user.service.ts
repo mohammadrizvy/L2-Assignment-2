@@ -68,12 +68,17 @@ const addProductToUserOrders = async (
   const result = await User.addProductToUserOrders(userId, productData);
   return result;
 };
-
+// ! Get all orders of a user
+const getAllOrdersOfUser = async (userId: number): Promise<TUser | null> => {
+  const result = await User.getAllOrdersOfUser(userId);
+  return result;
+};
 export const UserServices = {
   createUserIntoDB,
   retrieveAllUserFromDB,
   retrieveSingleUserByIdFromDB,
   DeleteSingleUser,
   updateSingleUserInDb,
-  addProductToUserOrders
+  addProductToUserOrders,
+  getAllOrdersOfUser
 };

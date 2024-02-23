@@ -23,6 +23,8 @@ router.delete('/users/:userId', userControllers.deleteSingleUser);
 
 //? Route for adding a new product to user's orders
 router.put('/users/:userId/orders', userControllers.addProductToUserOrders);
+// ? This route is for getting all orders of a user
+router.get('/users/:userId/orders', userControllers.getAllOrdersOfUser);
 
 export const userRoutes = router;
 

@@ -57,4 +57,6 @@ export interface UserModel extends Model<TUser> {
   updateSingleUser(userId: number,userData: TUpdateUser,): Promise<TUser | null>;
   // eslint-disable-next-line no-unused-vars
   addProductToUserOrders(userId: number,productData: TOrders,): Promise<TUser | null>;
+  // eslint-disable-next-line no-unused-vars
+  getAllOrdersOfUser(userId: number): Promise<TUser | null>;
 }
