@@ -86,7 +86,7 @@ const retrieveSingleUser = async (req: Request, res: Response) => {
 
 // ! UPDATING SINGLE USERS INFORMATION
 
-// Controller
+
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId, 10);
@@ -147,10 +147,51 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const addProductToUserOrders = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId, 10);
+    const productData = req.body;
+
+    const result = await UserServices.addProductToUserOrders(
+      userId,
+      productData,
+    );
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'Order created successfully!',
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found',
+        },
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: {
+        code: 500,
+        description: 'Internal server error',
+      },
+    });
+  }
+};
+
+
+
 export const userControllers = {
   createUser,
   retriveAllUsers,
   retrieveSingleUser,
   deleteSingleUser,
-  updateSingleUser
+  updateSingleUser,
+  addProductToUserOrders
 };

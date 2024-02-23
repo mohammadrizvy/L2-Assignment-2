@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { TAddress, TFullName, TUpdateUser, TUser, UserModel } from './user.interface';
+import { TAddress, TFullName, TOrders, TUpdateUser, TUser, UserModel } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../config';
 
@@ -89,7 +89,7 @@ userSchema.statics.deleteUserById = async function (userId: number) {
 
 userSchema.statics.updateSingleUser = async function (
   userId: number,
-  userData: TUpdateUser,): Promise<TUser | null> {
+  userData: TUpdateUser,) {
   const result = await this.findOneAndUpdate(
     { userId, isDeleted: false },
     userData,
@@ -99,6 +99,27 @@ userSchema.statics.updateSingleUser = async function (
     },
   );
   return result;
+};
+
+// Static method for adding a new product to user's orders
+userSchema.statics.addProductToUserOrders = async function (
+  userId: number,
+  productData: TOrders
+): Promise<TUser | null> {
+  const updatedUser = await this.findOneAndUpdate(
+    { userId },
+    {
+      $push: {
+        orders: { $each: [productData], $position: 0 },
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+      upsert: true,
+    }
+  );
+  return updatedUser;
 };
 
 

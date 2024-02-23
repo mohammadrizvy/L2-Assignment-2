@@ -1,4 +1,4 @@
-import {  TUpdateUser, TUser } from './user.interface';
+import { TOrders, TUpdateUser, TUser } from './user.interface';
 import { User } from './user.model';
 
 const createUserIntoDB = async (userData: TUser) => {
@@ -37,6 +37,17 @@ const updateSingleUserInDb = async (
 ): Promise<TUser | null> => {
   const result = await User.updateSingleUser(userId, updatedData);
 
+  // // Assuming User.updateSingleUser returns a model instance or query builder
+
+  //   const selectedUser = await result.select({
+  //     username: 1,
+  //     fullName: 1,
+  //     age: 1,
+  //     email: 1,
+  //     address: 1,
+  //     userId: 1,
+  //   });
+    
   return result;
 };
 
@@ -44,15 +55,25 @@ const updateSingleUserInDb = async (
 
 const DeleteSingleUser = async (userId: number): Promise<boolean> => {
   const result = await User.deleteOne({ userId });
-
   return result.deletedCount !== 0;
 };
 
+// ! Adding a new product to order
+
+const addProductToUserOrders = async (
+  userId: number,
+  productData: TOrders
+): Promise<TUser | null> => {
+
+  const result = await User.addProductToUserOrders(userId, productData);
+  return result;
+};
 
 export const UserServices = {
   createUserIntoDB,
   retrieveAllUserFromDB,
   retrieveSingleUserByIdFromDB,
   DeleteSingleUser,
-  updateSingleUserInDb
+  updateSingleUserInDb,
+  addProductToUserOrders
 };

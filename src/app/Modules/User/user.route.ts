@@ -3,7 +3,7 @@ import { userControllers } from './user.controller';
 
 const router = express.Router();
 
-//* When the user hit the route it will call the controller function
+// ?When the user hit the route it will call the controller function
 
 // ?This route is for creating new user 
 router.post('/users', userControllers.createUser);
@@ -20,6 +20,9 @@ router.put('/users/:userId', userControllers.updateSingleUser);
 
 // ?This route is for deleting a users 
 router.delete('/users/:userId', userControllers.deleteSingleUser);
+
+//? Route for adding a new product to user's orders
+router.put('/users/:userId/orders', userControllers.addProductToUserOrders);
 
 export const userRoutes = router;
 
