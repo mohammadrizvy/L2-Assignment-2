@@ -4,7 +4,7 @@ const fullNameValidationSchema = z.object({
   firstName: z
     .string()
     .min(1)
-    .max(15)
+    .max(20)
     .refine((value) => /^[A-Z]/.test(value), {
       message: 'First Name must start with a capital letter',
     }),

@@ -16,6 +16,7 @@ export type TOrders = Array<{
   productName: string;
   price: number;
   quantity: number;
+  totalPrice?: number;
 }>;
 
 export type TUser = {
@@ -28,7 +29,7 @@ export type TUser = {
   isActive: boolean;
   hobbies: string[];
   address: TAddress;
-  orders: TOrders;
+  orders : TOrders;
   isDeleted: boolean;
 };
 
@@ -59,4 +60,6 @@ export interface UserModel extends Model<TUser> {
   addProductToUserOrders(userId: number,productData: TOrders,): Promise<TUser | null>;
   // eslint-disable-next-line no-unused-vars
   getAllOrdersOfUser(userId: number): Promise<TUser | null>;
+  // eslint-disable-next-line no-unused-vars
+  getTotalPriceOfUserOrders(userId: number): Promise<number>;
 }

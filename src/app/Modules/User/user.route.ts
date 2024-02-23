@@ -25,6 +25,9 @@ router.delete('/users/:userId', userControllers.deleteSingleUser);
 router.put('/users/:userId/orders', userControllers.addProductToUserOrders);
 // ? This route is for getting all orders of a user
 router.get('/users/:userId/orders', userControllers.getAllOrdersOfUser);
+// ? This route is for calculating the total number of orders
+router.get('/users/:userId/orders/total-price',userControllers.getTotalPriceOfOrders);
+
 
 export const userRoutes = router;
 

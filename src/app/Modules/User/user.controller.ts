@@ -125,7 +125,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
 
 
 
-// DELELTE USER
+//! Delete a user from the database
 
 const deleteSingleUser = async (req: Request, res: Response) => {
   try {
@@ -146,7 +146,7 @@ const deleteSingleUser = async (req: Request, res: Response) => {
     });
   }
 };
-
+// !Add product to user's order array
 const addProductToUserOrders = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId, 10);
@@ -185,7 +185,7 @@ const addProductToUserOrders = async (req: Request, res: Response) => {
   }
 };
 
-
+// ! Get all orders of the specifie user
 const getAllOrdersOfUser = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId, 10);
@@ -219,6 +219,42 @@ const getAllOrdersOfUser = async (req: Request, res: Response) => {
     });
   }
 };
+ //! Calculating the total price of all orders 
+
+ const getTotalPriceOfOrders = async (req: Request, res: Response) => {
+   try {
+     const userId = parseInt(req.params.userId, 10);
+     const result = await UserServices.getTotalPriceOfOrders(userId);
+
+     if (result !== null) {
+       res.status(200).json({
+         success: true,
+         message: 'Total price calculated successfully!',
+         data: {
+           totalPrice: result,
+         },
+       });
+     } else {
+       res.status(404).json({
+         success: false,
+         message: 'User not found',
+         error: {
+           code: 404,
+           description: 'User not found',
+         },
+       });
+     }
+   } catch (err) {
+     res.status(500).json({
+       success: false,
+       message: 'Internal server error',
+       error: {
+         code: 500,
+         description: 'Internal server error',
+       },
+     });
+   }
+ };
 
 
 
@@ -229,5 +265,7 @@ export const userControllers = {
   deleteSingleUser,
   updateSingleUser,
   addProductToUserOrders,
-  getAllOrdersOfUser
+  getAllOrdersOfUser,
+  getTotalPriceOfOrders
+
 };

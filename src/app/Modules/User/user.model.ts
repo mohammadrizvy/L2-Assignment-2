@@ -132,11 +132,28 @@ userSchema.statics.addProductToUserOrders = async function (
 
 // *Static method for getting all orders of a user
 
-userSchema.statics.getAllOrdersOfUser = async function (
-  userId: number,
-) {
+userSchema.statics.getAllOrdersOfUser = async function (userId: number) {
   const result = await this.findOne({ userId });
   return result;
 };
+
+// * Static method for getting the total price of a users orders
+
+userSchema.statics.getTotalPriceOfUserOrders = async function (userId: number) {
+  const user = await this.findOne({ userId });
+
+  if (!user) {
+    return null; // User not found
+  }
+
+  const totalPrice = user.orders.reduce((acc, order) => {
+    const orderPrice = order.price || 0;
+    const orderQuantity = order.quantity || 0;
+    return acc + orderPrice * orderQuantity;
+  }, 0);
+
+  return totalPrice;
+};
+
 
 export const User = model<TUser, UserModel>('User', userSchema);

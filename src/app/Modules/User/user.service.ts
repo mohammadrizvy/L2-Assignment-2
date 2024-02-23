@@ -47,7 +47,7 @@ const updateSingleUserInDb = async (
   //     address: 1,
   //     userId: 1,
   //   });
-    
+
   return result;
 };
 
@@ -62,9 +62,8 @@ const DeleteSingleUser = async (userId: number): Promise<boolean> => {
 
 const addProductToUserOrders = async (
   userId: number,
-  productData: TOrders
+  productData: TOrders,
 ): Promise<TUser | null> => {
-
   const result = await User.addProductToUserOrders(userId, productData);
   return result;
 };
@@ -73,6 +72,16 @@ const getAllOrdersOfUser = async (userId: number): Promise<TUser | null> => {
   const result = await User.getAllOrdersOfUser(userId);
   return result;
 };
+
+//!Total price of orders
+
+const getTotalPriceOfOrders = async (
+  userId: number,
+): Promise<number | null> => {
+  const result = await User.getTotalPriceOfUserOrders(userId);
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   retrieveAllUserFromDB,
@@ -80,5 +89,6 @@ export const UserServices = {
   DeleteSingleUser,
   updateSingleUserInDb,
   addProductToUserOrders,
-  getAllOrdersOfUser
+  getAllOrdersOfUser,
+  getTotalPriceOfOrders
 };
