@@ -34,7 +34,7 @@ const retriveAllUsers = async (req: Request, res: Response) => {
     const result = await UserServices.retrieveAllUserFromDB();
     res.status(200).json({
       success: true,
-      message: 'Student is retrieved succesfully',
+      message: 'Users is retrieved succesfully',
       data: result,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
